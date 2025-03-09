@@ -12,9 +12,11 @@ spec:
       labels:
         app: authoritative-server
     spec:
+      restartPolicy: Always
       containers:
       - name: authoritative-server
         image: lakshitav/authoritative_server:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 53533
 ---
@@ -31,6 +33,7 @@ spec:
       targetPort: 53533
       nodePort: 30001
   type: NodePort
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,9 +49,11 @@ spec:
       labels:
         app: fibonacci-server
     spec:
+      restartPolicy: Always
       containers:
       - name: fibonacci-server
         image: lakshitav/fibonacci_server:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 9090
 ---
@@ -65,6 +70,7 @@ spec:
       targetPort: 9090
       nodePort: 30002
   type: NodePort
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,9 +86,11 @@ spec:
       labels:
         app: user-server
     spec:
+      restartPolicy: Always
       containers:
       - name: user-server
         image: lakshitav/user_server:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 ---
@@ -99,3 +107,4 @@ spec:
       targetPort: 8080
       nodePort: 30003
   type: NodePort
+  clusterIP: None
