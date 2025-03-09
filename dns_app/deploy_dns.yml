@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authoritative-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authoritative-server
+  template:
+    metadata:
+      labels:
+        app: authoritative-server
+    spec:
+      containers:
+      - name: authoritative-server
+        image: lakshitav/authoritative_server:latest
+        ports:
+        - containerPort: 53533
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authoritative-server-service
+spec:
+  selector:
+    app: authoritative-server
+  ports:
+    - protocol: UDP
+      port: 53533
+      targetPort: 53533
+      nodePort: 30001
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fibonacci-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fibonacci-server
+  template:
+    metadata:
+      labels:
+        app: fibonacci-server
+    spec:
+      containers:
+      - name: fibonacci-server
+        image: lakshitav/fibonacci_server:latest
+        ports:
+        - containerPort: 9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fibonacci-server-service
+spec:
+  selector:
+    app: fibonacci-server
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      nodePort: 30002
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-server
+  template:
+    metadata:
+      labels:
+        app: user-server
+    spec:
+      containers:
+      - name: user-server
+        image: lakshitav/user_server:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-server-service
+spec:
+  selector:
+    app: user-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30003
+  type: NodePort
